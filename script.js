@@ -1,4 +1,4 @@
-const questions = [
+const baseQuestions = [
   {
     question: "地球のまわりを回っている天体はどれ？",
     choices: ["火星", "月", "太陽"],
@@ -29,7 +29,47 @@ const questions = [
     answer: 1,
     explanation: "1時間は60分です。",
   },
+  {
+    question: "空の色が青く見えるのはなぜ？",
+    choices: ["雲の影", "大気が青い光を散らす", "月の光が反射する"],
+    answer: 1,
+    explanation: "大気が青い光を散らしやすくするためです。",
+  },
+  {
+    question: "日本の首都はどこ？",
+    choices: ["大阪", "東京", "京都"],
+    answer: 1,
+    explanation: "日本の首都は東京です。",
+  },
+  {
+    question: "1メートルは何センチメートル？",
+    choices: ["10cm", "100cm", "1000cm"],
+    answer: 1,
+    explanation: "1メートルは100センチメートルです。",
+  },
+  {
+    question: "世界で一番大きい海はどれ？",
+    choices: ["太平洋", "日本海", "地中海"],
+    answer: 0,
+    explanation: "太平洋は世界で最も大きい海です。",
+  },
+  {
+    question: "2の次に大きい素数はどれ？",
+    choices: ["3", "5", "7"],
+    answer: 0,
+    explanation: "素数の並びでは3が2の次です。",
+  },
 ];
+
+const questions = Array.from({ length: 100 }, (_, index) => {
+  const template = baseQuestions[index % baseQuestions.length];
+  const cycle = Math.floor(index / baseQuestions.length) + 1;
+
+  return {
+    ...template,
+    question: cycle === 1 ? template.question : `${template.question}（${cycle}）`,
+  };
+});
 
 const progressElement = document.querySelector("#progress");
 const scoreElement = document.querySelector("#score span");
@@ -116,7 +156,9 @@ function showResult() {
   finalScoreElement.textContent = `${score} / ${questions.length} 問正解`;
   resultMessageElement.textContent =
     score === questions.length ? "全問正解！すばらしい！" :
-      score >= 3 ? "いい調子！よくできました。" : "よく挑戦しました。またチャレンジしてみよう！";
+      score >= 80 ? "かなり上達しました！" :
+      score >= 60 ? "よくできました。" :
+      score >= 40 ? "あと少しで合格ラインです。" : "よく挑戦しました。またチャレンジしてみよう！";
   restartButton.focus();
 }
 
